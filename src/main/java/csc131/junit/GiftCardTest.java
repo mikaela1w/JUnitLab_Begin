@@ -15,7 +15,8 @@ public class GiftCardTest
 		assertEquals("getIssuingStore()",
 				issuingStore, card.getIssuingStore());
 	}
-	@Test public void getBalance() { 
+	@Test 
+	public void getBalance() { 
 		double balance; 
 		GiftCard card; 
 		int issuingStore; 
@@ -25,7 +26,8 @@ public class GiftCardTest
 		assertEquals("getBalance()", 
 				balance, card.getBalance(), 0.001); 
 	}
-	@Test public void deduct() { 
+	@Test 
+	public void deduct() { 
 		double balance; 
 		GiftCard card; 
 		int issuingStore; 
@@ -36,5 +38,49 @@ public class GiftCardTest
 		s = "Remaining Balance:" + String.format("%6.2f", 90.00); 
 		assertEquals("deduct(10.00)", 
 				s, card.deduct(10.0)); 
+	}
+	@Test 
+	public void deduct_amountDue() { 
+		double balance; 
+		GiftCard card; 
+		int issuingStore; 
+		String s; 
+		issuingStore = 1337; 
+		balance = 100.00; 
+		card = new GiftCard(issuingStore, balance); 
+		s = "Amount Due:" + String.format("%6.2f", 10.00); 
+		assertEquals("deduct 110.00 from 100.00", 
+				s, card.deduct(110.0)); 
+		}
+	@Test
+	public void deduct_invalidTransaction() { 
+		double balance; 
+		GiftCard card; 
+		int issuingStore; 
+		String s; 
+		issuingStore = 1337; 
+		balance = 100.00; 
+		card = new GiftCard(issuingStore, balance); 
+		s = "Invalid Transaction"; 
+		assertEquals("deduct -10.00 from 100.00", 
+				s, card.deduct(-10.0)); 
+		}
+	
+	@Test
+	(expected = IllegalArgumentException.class)
+	public void constructor_IncorrectBalance() throws IllegalArgumentException
+	{
+		assertThrows(IllegalArgumentException.class, () -> {new GiftCard(1,-100.00);});
+	}
+	
+	@Test
+	(expected = IllegalArgumentException.class)
+	public void constructor_IncorrectID_Low() { 
+		new GiftCard(-1, 100.00); 
+	}
+	@Test
+	(expected = IllegalArgumentException.class) 
+	public void constructor_IncorrectID_High() { 
+		new GiftCard(100000, 100.00); 
 	}
 }
